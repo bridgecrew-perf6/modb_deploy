@@ -4,23 +4,15 @@ services:
   nginx_proxy_fe:
     image: nginx:1.21.5-alpine
     volumes:
-     - ./services/nginx_proxy/config_fe:/etc/nginx/conf.d
+     - ./services/nginx_proxy/config:/etc/nginx/conf.d
      - ./services/nginx_proxy/certs:/etc/nginx/certs
     ports:
      - "80:80"
      - "443:443"
+     - "8000:8000"
     networks:
       modb_net:
         ipv4_address: 172.25.0.2
-
-  nginx_proxy_be:
-    image: nginx:1.21.5-alpine
-    volumes:
-     - ./services/nginx_proxy/config_be:/etc/nginx/conf.d
-     - ./services/nginx_proxy/certs:/etc/nginx/certs
-    networks:
-      modb_net:
-        ipv4_address: 172.25.0.3
 
   modb_db:
     image: postgres:14.1-alpine
@@ -41,7 +33,7 @@ services:
     build: https://github.com/gbriones1/modb_fe.git#main
     image: modb_fe
     environment:
-      - API_HOST=172.25.0.3
+      - API_HOST=localhost
       - API_PORT=8000
       - API_PROTOCOL=https
     networks:
