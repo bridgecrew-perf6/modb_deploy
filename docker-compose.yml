@@ -18,6 +18,7 @@ services:
     image: postgres:14.1-alpine
     environment:
      - POSTGRES_PASSWORD=mysecretpassword
+     - POSTGRES_DB=modb
     networks:
       modb_net:
         ipv4_address: 172.25.0.4
@@ -25,6 +26,8 @@ services:
   modb_be:
     build: https://github.com/gbriones1/modb_be.git#main
     image: modb_be
+    environment:
+      - db_url=postgres://postgres:mysecretpassword@172.25.0.4:5432/modb
     networks:
       modb_net:
         ipv4_address: 172.25.0.5
