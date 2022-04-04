@@ -22,10 +22,11 @@ services:
     networks:
       modb_net:
         ipv4_address: 172.25.0.4
+    volumes:
+     - ./pgdata:/var/lib/postgresql/data
 
   modb_be:
-    build: https://github.com/gbriones1/modb_be.git#main
-    image: modb_be
+    image: ghcr.io/gbriones1/modb_be:main
     environment:
       - db_url=postgres://postgres:mysecretpassword@172.25.0.4:5432/modb
     networks:
@@ -33,8 +34,7 @@ services:
         ipv4_address: 172.25.0.5
 
   modb_fe:
-    build: https://github.com/gbriones1/modb_fe.git#main
-    image: modb_fe
+    image: ghcr.io/gbriones1/modb_fe:main
     environment:
       - API_HOST=localhost
       - API_PORT=8000
